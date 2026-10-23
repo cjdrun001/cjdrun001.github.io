@@ -97,53 +97,65 @@
       <button class="modal-close" id="modalCloseBtn" type="button" aria-label="닫기">×</button>
     </div>
     <div class="player-wrap">
-      <iframe id="videoPlayerFrame" src="" title="YouTube 영상 재생기" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="videoPlayerFrame" src="" title="YouTube 영상 재생기" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
   </div>
 </div>
 
 <script>
 (() => {
-  // M01~M10 하드코딩 영상 ID 및 M11~M36 사전 매핑 목록
-  // M01~M10의 videoId 값에 유튜브 영상의 고유 ID(11자리)를 직접 입력합니다.
   const VIDEO_ITEMS = [
-    { id: 'M01', tag: 'AI 기초', title: 'AI와 나누는 첫 업무 대화: 질문의 맥락과 방향 설정', videoId: 'VIDEO_ID_M01' },
-    { id: 'M02', tag: 'AI 기초', title: '실습 자료와 데이터 준비: AI에게 넘겨줄 자료 정돈하기', videoId: 'VIDEO_ID_M02' },
-    { id: 'M03', tag: 'AI 기초', title: '나의 변화목표 한 문장으로 읽기', videoId: 'VIDEO_ID_M03' },
-    { id: 'M04', tag: 'AI 기초', title: '첫 AI 요청·응답과 개인정보 점검', videoId: 'VIDEO_ID_M04' },
-    { id: 'M05', tag: 'AI 기초', title: 'WHAT·WHO·HOW·LOOK·Task·Context', videoId: 'VIDEO_ID_M05' },
-    { id: 'M06', tag: 'AI 기초', title: '요청 하나만 바꾸어 결과 비교하기', videoId: 'VIDEO_ID_M06' },
-    { id: 'M07', tag: 'AI 기초', title: '내 과제에 참고자료 연결하기', videoId: 'VIDEO_ID_M07' },
-    { id: 'M08', tag: 'AI 기초', title: '출처와 미확정 정보를 평가하기', videoId: 'VIDEO_ID_M08' },
-    { id: 'M09', tag: '문서 작성', title: '개인 목적에서 제작 조건 추출하기', videoId: 'VIDEO_ID_M09' },
-    { id: 'M10', tag: '문서 작성', title: '재사용 프롬프트 실제 입력하기', videoId: 'VIDEO_ID_M10' },
-    { id: 'M11', tag: '문서 작성', title: '첫 제작본을 수정 전에 읽는 법', videoId: null },
-    { id: 'M12', tag: '문서 작성', title: '수정 시 원자료·원본 대조하기', videoId: null },
-    { id: 'M13', tag: '문서 작성', title: '유지조건과 변경조건 분리 복습', videoId: null },
-    { id: 'M14', tag: '문서 작성', title: '문서의 사실이 바뀌지 않았는지 확인', videoId: null },
-    { id: 'M15', tag: '영상 생성', title: '이미지의 구도·스타일 유지 확인', videoId: null },
-    { id: 'M16', tag: '문서 작성', title: '문서·문항 검수기록 읽기', videoId: null },
-    { id: 'M17', tag: '영상 생성', title: '스토리보드와 영상 소재 확인', videoId: null },
-    { id: 'M18', tag: '문서 작성', title: '최종 작품 공유 전 점검', videoId: null },
-    { id: 'M19', tag: '바이브코딩', title: '내가 반복했던 일 찾아내기', videoId: null },
-    { id: 'M20', tag: '바이브코딩', title: '자연어로 웹앱 요구사항 설계하기', videoId: null },
-    { id: 'M21', tag: '바이브코딩', title: '내 웹앱 첫 화면 구성 다시 보기', videoId: null },
-    { id: 'M22', tag: '바이브코딩', title: '기존 앱을 유지하며 기능 요청하기', videoId: null },
-    { id: 'M23', tag: '바이브코딩', title: '키워드 분류의 정상·예외 입력 복습', videoId: null },
-    { id: 'M24', tag: '바이브코딩', title: '브라우저 저장과 새로고침 확인', videoId: null },
-    { id: 'M25', tag: '바이브코딩', title: 'AI 요약을 추가해도 기존 기능 지키기', videoId: null },
-    { id: 'M26', tag: '바이브코딩', title: '다른 사용자 관점에서 웹앱 사용 흐름 확인', videoId: null },
-    { id: 'M27', tag: '바이브코딩', title: '진짜 AI 결과·예시·오류 구분', videoId: null },
-    { id: 'M28', tag: '바이브코딩', title: '버그 재현과 회귀 검사', videoId: null },
-    { id: 'M29', tag: '바이브코딩', title: '반복작업을 작은 Task로 바꾸기', videoId: null },
-    { id: 'M30', tag: '바이브코딩', title: '자동화할 자료와 사람 검토 기준 정하기', videoId: null },
-    { id: 'M31', tag: '바이브코딩', title: 'Tasks·Skills·Schedules 다시 구분하기', videoId: null },
-    { id: 'M32', tag: '바이브코딩', title: '단건 실행·예외·예약을 구분하기', videoId: null },
-    { id: 'M33', tag: 'AI 기초', title: '변화카드에서 근거 검증까지의 성장 기록', videoId: null },
-    { id: 'M34', tag: '영상 생성', title: '대표 작품과 나의 기여 이야기하기', videoId: null },
-    { id: 'M35', tag: '바이브코딩', title: '웹앱·자동화 성취를 근거로 설명하기', videoId: null },
-    { id: 'M36', tag: 'AI 기초', title: '작품 공유의 개인정보·권리 최종 확인', videoId: null }
+    { id: 'M01', tag: 'AI 기초', title: 'AI와 나누는 첫 업무 대화: 질문의 맥락과 방향 설정', url: 'https://www.youtube.com/watch?v=GRxATLD5pDY' },
+    { id: 'M02', tag: 'AI 기초', title: '실습 자료와 데이터 준비: AI에게 넘겨줄 자료 정돈하기', url: 'https://www.youtube.com/watch?v=nixjK3ug2KQ' },
+    { id: 'M03', tag: 'AI 기초', title: '나의 변화목표 한 문장으로 읽기', url: 'https://www.youtube.com/watch?v=_G8jxtK6Be4' },
+    { id: 'M04', tag: 'AI 기초', title: '첫 AI 요청·응답과 개인정보 점검', url: 'https://www.youtube.com/watch?v=7fJIr0ON8zk' },
+    { id: 'M05', tag: 'AI 기초', title: 'WHAT·WHO·HOW·LOOK·Task·Context', url: 'https://www.youtube.com/watch?v=m66RL06uGEI' },
+    { id: 'M06', tag: 'AI 기초', title: '요청 하나만 바꾸어 결과 비교하기', url: 'https://www.youtube.com/watch?v=XLiZFKNG8M4' },
+    { id: 'M07', tag: 'AI 기초', title: '내 과제에 참고자료 연결하기', url: 'https://www.youtube.com/watch?v=Sz9MFlC8lPM' },
+    { id: 'M08', tag: 'AI 기초', title: '출처와 미확정 정보를 평가하기', url: 'https://www.youtube.com/watch?v=CA_5HcHMvkY' },
+    { id: 'M09', tag: '문서 작성', title: '개인 목적에서 제작 조건 추출하기', url: 'https://www.youtube.com/watch?v=D5tpH7D3R1I' },
+    { id: 'M10', tag: '문서 작성', title: '재사용 프롬프트 실제 입력하기', url: null },
+    { id: 'M11', tag: '문서 작성', title: '첫 제작본을 수정 전에 읽는 법', url: null },
+    { id: 'M12', tag: '문서 작성', title: '수정 시 원자료·원본 대조하기', url: null },
+    { id: 'M13', tag: '문서 작성', title: '유지조건과 변경조건 분리 복습', url: null },
+    { id: 'M14', tag: '문서 작성', title: '문서의 사실이 바뀌지 않았는지 확인', url: null },
+    { id: 'M15', tag: '영상 생성', title: '이미지의 구도·스타일 유지 확인', url: null },
+    { id: 'M16', tag: '문서 작성', title: '문서·문항 검수기록 읽기', url: null },
+    { id: 'M17', tag: '영상 생성', title: '스토리보드와 영상 소재 확인', url: null },
+    { id: 'M18', tag: '문서 작성', title: '최종 작품 공유 전 점검', url: null },
+    { id: 'M19', tag: '바이브코딩', title: '내가 반복했던 일 찾아내기', url: null },
+    { id: 'M20', tag: '바이브코딩', title: '자연어로 웹앱 요구사항 설계하기', url: null },
+    { id: 'M21', tag: '바이브코딩', title: '내 웹앱 첫 화면 구성 다시 보기', url: null },
+    { id: 'M22', tag: '바이브코딩', title: '기존 앱을 유지하며 기능 요청하기', url: null },
+    { id: 'M23', tag: '바이브코딩', title: '키워드 분류의 정상·예외 입력 복습', url: null },
+    { id: 'M24', tag: '바이브코딩', title: '브라우저 저장과 새로고침 확인', url: null },
+    { id: 'M25', tag: '바이브코딩', title: 'AI 요약을 추가해도 기존 기능 지키기', url: null },
+    { id: 'M26', tag: '바이브코딩', title: '다른 사용자 관점에서 웹앱 사용 흐름 확인', url: null },
+    { id: 'M27', tag: '바이브코딩', title: '진짜 AI 결과·예시·오류 구분', url: null },
+    { id: 'M28', tag: '바이브코딩', title: '버그 재현과 회귀 검사', url: null },
+    { id: 'M29', tag: '바이브코딩', title: '반복작업을 작은 Task로 바꾸기', url: null },
+    { id: 'M30', tag: '바이브코딩', title: '자동화할 자료와 사람 검토 기준 정하기', url: null },
+    { id: 'M31', tag: '바이브코딩', title: 'Tasks·Skills·Schedules 다시 구분하기', url: null },
+    { id: 'M32', tag: '바이브코딩', title: '단건 실행·예외·예약을 구분하기', url: null },
+    { id: 'M33', tag: 'AI 기초', title: '변화카드에서 근거 검증까지의 성장 기록', url: null },
+    { id: 'M34', tag: '영상 생성', title: '대표 작품과 나의 기여 이야기하기', url: null },
+    { id: 'M35', tag: '바이브코딩', title: '웹앱·자동화 성취를 근거로 설명하기', url: null },
+    { id: 'M36', tag: 'AI 기초', title: '작품 공유의 개인정보·권리 최종 확인', url: null }
   ];
+
+  function parseVideoId(url) {
+    if (!url || typeof url !== 'string') return null;
+    const trimmed = url.trim();
+    if (!trimmed) return null;
+
+    const regExp = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    const match = trimmed.match(regExp);
+    if (match && match[1]) return match[1];
+
+    if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+
+    return null;
+  }
 
   const videoGrid = document.getElementById('videoGrid');
   const filterButtons = document.querySelectorAll('.filter');
@@ -172,11 +184,12 @@
       const card = document.createElement('div');
       card.className = 'card';
 
-      const isReady = Boolean(item.videoId && item.videoId.trim() !== '');
+      const videoId = parseVideoId(item.url);
+      const isReady = Boolean(videoId);
 
       const thumbHtml = isReady
         ? `<div class="thumb">
-             <img class="video-thumb" src="https://i.ytimg.com/vi/${item.videoId}/hqdefault.jpg" alt="${item.title}" loading="lazy" onerror="this.style.display='none'">
+             <img class="video-thumb" src="https://i.ytimg.com/vi/${videoId}/hqdefault.jpg" alt="${item.title}" loading="lazy" onerror="this.style.display='none'">
              <div class="thumb-art" style="position:absolute;"><span style="font-size:24px;color:var(--ink);">${item.id}</span></div>
            </div>`
         : `<div class="thumb">
@@ -188,7 +201,7 @@
         : `<span class="status pending">업로드 대기</span>`;
 
       const actionContent = isReady
-        ? `<button type="button" class="video-card-button" data-video-id="${item.videoId}" data-title="${item.title}">
+        ? `<button type="button" class="video-card-button" data-video-id="${videoId}" data-title="${item.title}">
              ${thumbHtml}
              <div class="card-body">
                <div class="card-top">
@@ -234,7 +247,8 @@
 
   function openPlayer(videoId, title) {
     modalTitle.textContent = title;
-    playerFrame.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+    playerFrame.title = title;
+    playerFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
   }
